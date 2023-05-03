@@ -49,6 +49,9 @@ final class MainScreenController: UIViewController {
     private let headerLine = UICreator.shared.makeView(bacgroundColor: .wwLine)
     private let tableView = UICreator.shared.makeTable(
         withCells: (type: WeightTrackingCell.self, identifier: K.CellIdentifiers.weightTrackingCell))
+    private let createWeightNoteButton = UICreator.shared.makeButton(image: UIImage(named: K.IconNames.plus),
+                                                                     cornerRadius: 24,
+                                                                     andAction: #selector(createWeightNoteButtonTapped))
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -70,6 +73,10 @@ extension MainScreenController {
         print(#function)
     }
 
+    @objc private func createWeightNoteButtonTapped() {
+        present(WeightNoteScreenController(), animated: true)
+    }
+
     private func setupAutolayout() {
         scrollView.toAutolayout()
         weightMonitorLabel.toAutolayout()
@@ -84,6 +91,7 @@ extension MainScreenController {
         headerStackView.toAutolayout()
         headerLine.toAutolayout()
         tableView.toAutolayout()
+        createWeightNoteButton.toAutolayout()
     }
 
     private func addSubviews() {
@@ -107,6 +115,7 @@ extension MainScreenController {
         scrollView.addSubview(headerLine)
         scrollView.addSubview(tableView)
         view.addSubview(scrollView)
+        view.addSubview(createWeightNoteButton)
     }
 
     private func setupConstraints() {
@@ -148,7 +157,11 @@ extension MainScreenController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: inset),
             tableView.topAnchor.constraint(equalTo: headerLine.bottomAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
-            tableView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -inset)
+            tableView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -inset),
+            createWeightNoteButton.heightAnchor.constraint(equalToConstant: 48),
+            createWeightNoteButton.widthAnchor.constraint(equalTo: createWeightNoteButton.heightAnchor, multiplier: 1),
+            createWeightNoteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
+            createWeightNoteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)
         ])
     }
 
@@ -165,15 +178,16 @@ extension MainScreenController {
 
 // MARK: - UITableViewDataSource
 extension MainScreenController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var frame = tableView.frame
-        frame.size.height = tableView.contentSize.height * 1.7
+        frame.size.height = tableView.contentSize.height * 1.6
         tableView.frame = frame
         return viewModel?.giveNumberOfRows() ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableView.heightAnchor.constraint(equalToConstant: tableView.contentSize.height * 1.7).isActive = true
+        tableView.heightAnchor.constraint(equalToConstant: tableView.contentSize.height * 1.6).isActive = true
         return viewModel?.configureCell(forTableView: tableView, atIndexPath: indexPath) ?? UITableViewCell()
     }
 

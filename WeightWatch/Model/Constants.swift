@@ -11,7 +11,8 @@ import Foundation
 struct K {
 
     struct IconNames {
-        static let chevron = "ChevronIcon"
+        static let chevron = "Chevron"
+        static let plus = "Plus"
     }
 
     struct ImageNames {
@@ -20,5 +21,8 @@ struct K {
 
     struct CellIdentifiers {
         static let weightTrackingCell = "WeightTrackingCell"
+        static let selectedDateCell = "SelectedDateCell"
+        static let datePickerCell = "DatePickerCell"
+        static let weightCell = "WeightCell"
     }
 }

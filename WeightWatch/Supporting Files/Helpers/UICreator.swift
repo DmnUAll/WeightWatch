@@ -65,56 +65,60 @@ struct UICreator {
     func makeScrollView() -> UIScrollView {
         let scrollView = UIScrollView()
         scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 0)
-//        scrollView.contentMode = .scaleToFill
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }
 
-//    func makeTextField(withPlacegolder placeholder: String? = nil, isSecured: Bool = false) -> UITextField {
-//        let textField = UITextField()
-//        textField.layer.cornerRadius = 16
-//        textField.layer.masksToBounds = true
-//        textField.backgroundColor = .iecCream
-//        textField.textColor = .iecPurpleDark
-//        textField.attributedPlaceholder = NSAttributedString(
-//            string: placeholder ?? "",
-//            attributes: [NSAttributedString.Key.foregroundColor: UIColor.iecPurpleLight.withAlphaComponent(0.25)])
-//        if let button = textField.value(forKey: "clearButton") as? UIButton {
-//          button.tintColor = .iecPurpleDark
-//          button.setImage(UIImage(systemName: "xmark.circle.fill")?.withRenderingMode(.alwaysTemplate), for: .normal)
-//        }
-//        textField.clearButtonMode = .whileEditing
-//        textField.textAlignment = .center
-//        if isSecured {
-//            textField.isSecureTextEntry = true
-//        }
-//        return textField
-//    }
-//
+    func makeTextField() -> UITextField {
+        let textField = UITextField()
+        textField.backgroundColor = .clear
+        textField.textColor = .wwText
+        textField.keyboardType = .numberPad
+        textField.font =  UIFont.appFont(.bold, withSize: 34)
+        return textField
+    }
+
     func makeImageView(withImageNamed imageName: String? = nil
     ) -> UIImageView {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .clear
         if let imageName {
             imageView.image = UIImage(named: imageName)
         }
         return imageView
     }
-//
-//    func makeButton(withTitle title: String, andAction selector: Selector) -> UIButton {
-//        let button = UIButton()
-//        button.layer.cornerRadius = 16
-//        button.layer.masksToBounds = true
-//        button.backgroundColor = .iecPurpleLight
-//        button.tintColor = .iecCream
-//        button.setTitle(title, for: .normal)
-//        button.titleLabel?.font = UIFont.appFont(.bold, withSize: 16)
-//        button.addTarget(nil, action: selector, for: .touchUpInside)
-//        return button
-//    }
-//
+
+    func makeButton(withTitle title: String = "",
+                    image: UIImage? = nil,
+                    backgroundColor: UIColor = .wwPurple,
+                    tintColor: UIColor = .white,
+                    cornerRadius: CGFloat = 10,
+                    andAction selector: Selector
+    ) -> UIButton {
+        let button = UIButton()
+        button.setImage(image, for: .normal)
+        button.layer.cornerRadius = cornerRadius
+        button.layer.masksToBounds = true
+        button.backgroundColor = backgroundColor
+        button.tintColor = tintColor
+        button.setTitle(title, for: .normal)
+        button.titleLabel?.font = UIFont.appFont(.medium, withSize: 17)
+        button.addTarget(nil, action: selector, for: .touchUpInside)
+        return button
+    }
+
+    func makeDatePicker() -> UIDatePicker {
+        let datePicker = UIDatePicker()
+        datePicker.backgroundColor = .clear
+        datePicker.tintColor = .wwText
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.locale = Locale(identifier: "ru")
+        return datePicker
+    }
+
     func makeTable(withCells cells: (type: UITableViewCell.Type, identifier: String)...) -> UITableView {
         let tableView = UITableView()
         tableView.toAutolayout()
@@ -128,30 +132,4 @@ struct UICreator {
         tableView.isScrollEnabled = false
         return tableView
     }
-//
-//    func makeActivityIndicator(withColor color: UIColor) -> UIActivityIndicatorView {
-//        let activityIndicator = UIActivityIndicatorView()
-//        activityIndicator.hidesWhenStopped = true
-//        activityIndicator.color = color
-//        return activityIndicator
-//    }
-//
-//    func makeSearchTextField() -> UISearchTextField {
-//        let searchField = UISearchTextField()
-//        searchField.placeholder = "SEARCH".localized
-//        searchField.backgroundColor = .iecPurple.withAlphaComponent(0.12)
-//        searchField.textColor = .iecCream
-//        searchField.attributedPlaceholder = NSAttributedString(
-//            string: searchField.placeholder ?? "",
-//            attributes: [
-//                NSAttributedString.Key.foregroundColor: UIColor.iecPurpleLight
-//            ]
-//        )
-//        if let leftView = searchField.leftView as? UIImageView {
-//            leftView.image = leftView.image?.withRenderingMode(.alwaysTemplate)
-//            leftView.tintColor = UIColor.iecPurpleLight
-//        }
-//        searchField.clearButtonMode = .never
-//        return searchField
-//    }
 }
