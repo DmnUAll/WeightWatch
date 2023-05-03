@@ -1,1 +1,11 @@
-"MONITOR_WHAT_YOU_NEED" = "Отслеживайте только то, что хотите";
+"WEIGHT_MONITOR" = "Weight monitor";
+"CURRENT_WEIGHT" = "Current weight";
+"KG" = "Kg";
+"LB" = "Lb";
+"METRIC_SYSTEM" = "Metric system";
+"NO_DATA" = "No Data";
+"MONTHLY_MEASUREMENTS" = "Monthly measurements";
+"HISTORY" = "History";
+"WEIGHT" = "Weight";
+"CHANGES" = "Changes";
+"DATE" = "Date";

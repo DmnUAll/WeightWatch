@@ -15,10 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions
     ) {
-//        guard let scene = (scene as? UIWindowScene) else { return }
-//        window = UIWindow(windowScene: scene)
-//        window?.rootViewController = SplashViewController()
-//        window?.makeKeyAndVisible()
+        guard let scene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: scene)
+        window?.rootViewController = MainScreenController()
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
