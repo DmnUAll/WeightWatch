@@ -32,6 +32,9 @@
 		6145FC8C2A02923100908613 /* SelectedDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6145FC8B2A02923100908613 /* SelectedDateCell.swift */; };
 		6145FC8E2A0293AC00908613 /* DatePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6145FC8D2A0293AC00908613 /* DatePickerCell.swift */; };
 		6145FC902A02942900908613 /* WeightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6145FC8F2A02942900908613 /* WeightCell.swift */; };
+		615D7A422A07DB2B007D8D0C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D7A412A07DB2B007D8D0C /* CoreDataManager.swift */; };
+		615D7A442A07DB4D007D8D0C /* WeightNoteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D7A432A07DB4D007D8D0C /* WeightNoteStore.swift */; };
+		619D97A52A08366D00B97DE6 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619D97A42A08366D00B97DE6 /* UserDefaultsManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +66,9 @@
 		6145FC8B2A02923100908613 /* SelectedDateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedDateCell.swift; sourceTree = "<group>"; };
 		6145FC8D2A0293AC00908613 /* DatePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerCell.swift; sourceTree = "<group>"; };
 		6145FC8F2A02942900908613 /* WeightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCell.swift; sourceTree = "<group>"; };
+		615D7A412A07DB2B007D8D0C /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		615D7A432A07DB4D007D8D0C /* WeightNoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightNoteStore.swift; sourceTree = "<group>"; };
+		619D97A42A08366D00B97DE6 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,7 +126,8 @@
 		6145FC322A0167BD00908613 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				6145FC212A01668600908613 /* WeightWatch.xcdatamodeld */,
+				615D7A3A2A07D8B2007D8D0C /* CoreData */,
+				619D97A42A08366D00B97DE6 /* UserDefaultsManager.swift */,
 				6145FC602A0172D100908613 /* Constants.swift */,
 				6145FC5E2A016F8E00908613 /* Observable.swift */,
 				6145FC7A2A02505800908613 /* WeightNote.swift */,
@@ -219,6 +226,16 @@
 				6145FC782A02498900908613 /* WeightTrackingCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		615D7A3A2A07D8B2007D8D0C /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				6145FC212A01668600908613 /* WeightWatch.xcdatamodeld */,
+				615D7A412A07DB2B007D8D0C /* CoreDataManager.swift */,
+				615D7A432A07DB4D007D8D0C /* WeightNoteStore.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -326,14 +343,17 @@
 				6145FC232A01668600908613 /* WeightWatch.xcdatamodeld in Sources */,
 				6145FC812A02576E00908613 /* Date+Extensions.swift in Sources */,
 				6145FC572A016B4700908613 /* String+Extensions.swift in Sources */,
+				615D7A422A07DB2B007D8D0C /* CoreDataManager.swift in Sources */,
 				6145FC742A017ADF00908613 /* MainScreenViewModel.swift in Sources */,
 				6145FC8C2A02923100908613 /* SelectedDateCell.swift in Sources */,
 				6145FC752A017ADF00908613 /* MainScreenController.swift in Sources */,
+				619D97A52A08366D00B97DE6 /* UserDefaultsManager.swift in Sources */,
 				6145FC302A0166EA00908613 /* SceneDelegate.swift in Sources */,
 				6145FC582A016B4700908613 /* UIFont+Extensions.swift in Sources */,
 				6145FC882A0282E700908613 /* WeightNoteScreenViewModel.swift in Sources */,
 				6145FC612A0172D100908613 /* Constants.swift in Sources */,
 				6145FC5C2A016B4700908613 /* UICreator.swift in Sources */,
+				615D7A442A07DB4D007D8D0C /* WeightNoteStore.swift in Sources */,
 				6145FC902A02942900908613 /* WeightCell.swift in Sources */,
 				6145FC792A02498900908613 /* WeightTrackingCell.swift in Sources */,
 				6145FC8E2A0293AC00908613 /* DatePickerCell.swift in Sources */,

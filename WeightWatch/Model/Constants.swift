@@ -25,4 +25,8 @@ struct K {
         static let datePickerCell = "DatePickerCell"
         static let weightCell = "WeightCell"
     }
+
+    struct EntityNames {
+        static let weightNoteCD = "WeightNoteCD"
+    }
 }

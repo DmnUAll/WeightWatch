@@ -55,6 +55,7 @@ final class MainScreenController: UIViewController {
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .wwBackground
         setupAutolayout()
         addSubviews()
@@ -63,6 +64,7 @@ final class MainScreenController: UIViewController {
         bind()
         tableView.dataSource = self
         tableView.delegate = self
+        scaleSystemSwitch.isOn = viewModel?.giveCurrentScaleSystemState() ?? true
     }
 }
 
@@ -70,11 +72,12 @@ final class MainScreenController: UIViewController {
 extension MainScreenController {
 
     @objc private func scaleSystemSwitchTapped() {
-        print(#function)
+        viewModel?.changeToMetricSystem(scaleSystemSwitch.isOn)
     }
 
     @objc private func createWeightNoteButtonTapped() {
         present(WeightNoteScreenController(), animated: true)
+        tableView.reloadData()
     }
 
     private func setupAutolayout() {
@@ -157,7 +160,7 @@ extension MainScreenController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: inset),
             tableView.topAnchor.constraint(equalTo: headerLine.bottomAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
-            tableView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -inset),
+            tableView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -inset * 6),
             createWeightNoteButton.heightAnchor.constraint(equalToConstant: 48),
             createWeightNoteButton.widthAnchor.constraint(equalTo: createWeightNoteButton.heightAnchor, multiplier: 1),
             createWeightNoteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
@@ -165,12 +168,16 @@ extension MainScreenController {
         ])
     }
 
+    func addNote(_ weightNote: WeightNote) {
+        viewModel?.addNote(weightNote)
+    }
+
     private func bind() {
         guard let viewModel = viewModel else { return }
         viewModel.$needToUpdateView.bind { [weak self] newValue in
             guard let self else { return }
             if newValue {
-                // TODO: UI update logic is needed
+                self.tableView.reloadData()
             }
         }
     }
@@ -180,14 +187,10 @@ extension MainScreenController {
 extension MainScreenController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var frame = tableView.frame
-        frame.size.height = tableView.contentSize.height * 1.6
-        tableView.frame = frame
         return viewModel?.giveNumberOfRows() ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableView.heightAnchor.constraint(equalToConstant: tableView.contentSize.height * 1.6).isActive = true
         return viewModel?.configureCell(forTableView: tableView, atIndexPath: indexPath) ?? UITableViewCell()
     }
 

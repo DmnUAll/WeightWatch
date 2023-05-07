@@ -13,7 +13,7 @@ final class SelectedDateCell: UITableViewCell {
     // MARK: - Properties and Initializers
     private let dateLabel = UICreator.shared.makeLabel(text: "DATE".localized,
                                                        font: UIFont.appFont(.medium, withSize: 17))
-    let selectedDateLabel = UICreator.shared.makeLabel(text: "TODAY".localized, color: .wwPurple)
+    let selectedDateLabel = UICreator.shared.makeLabel(text: "TODAY".localized, color: .wwPurple, alignment: .right)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,6 +46,7 @@ extension SelectedDateCell {
         NSLayoutConstraint.activate([
             dateLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             dateLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16.5),
+            selectedDateLabel.leadingAnchor.constraint(equalTo: dateLabel.trailingAnchor, constant: 16.5),
             selectedDateLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             selectedDateLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -44.5)
         ])

@@ -74,7 +74,7 @@ struct UICreator {
         let textField = UITextField()
         textField.backgroundColor = .clear
         textField.textColor = .wwText
-        textField.keyboardType = .numberPad
+        textField.keyboardType = .decimalPad
         textField.font =  UIFont.appFont(.bold, withSize: 34)
         return textField
     }
@@ -120,7 +120,7 @@ struct UICreator {
     }
 
     func makeTable(withCells cells: (type: UITableViewCell.Type, identifier: String)...) -> UITableView {
-        let tableView = UITableView()
+        let tableView = SelfSizingTableView()
         tableView.toAutolayout()
         for singleCell in cells {
             tableView.register(singleCell.type, forCellReuseIdentifier: singleCell.identifier)
@@ -131,5 +131,19 @@ struct UICreator {
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.isScrollEnabled = false
         return tableView
+    }
+}
+
+class SelfSizingTableView: UITableView {
+    override var contentSize: CGSize {
+        didSet {
+            invalidateIntrinsicContentSize()
+            setNeedsLayout()
+        }
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let height = min(.infinity, contentSize.height)
+        return CGSize(width: contentSize.width, height: height)
     }
 }

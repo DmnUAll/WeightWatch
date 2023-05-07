@@ -11,18 +11,18 @@ import UIKit
 final class MainScreenViewModel {
 
     // MARK: - Properties and Initializers
-    @Observable
-    private(set) var needToUpdateView: Bool = false
+    @Observable private(set) var needToUpdateView: Bool = false
 
-    private var weightNotes: [WeightNote] = [WeightNote(weightKG: 1, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 2, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 3, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 4, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 5, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 6, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 7, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 8, changesKG: 0.0, date: Date()),
-                                             WeightNote(weightKG: 9, changesKG: 0.0, date: Date())]
+    private let weightNoteStore = WeightNoteStore()
+
+    private var weightNotes: [WeightNote] = []
+
+    init() {
+        weightNotes = weightNoteStore.weightNotes.sorted(by: { $0.date > $1.date })
+        if !weightNotes.isEmpty {
+            needToUpdateView = true
+        }
+    }
 }
 
 // MARK: - Helpers
@@ -37,9 +37,15 @@ extension MainScreenViewModel {
                                                        for: indexPath) as? WeightTrackingCell else {
             return UITableViewCell()
         }
-        cell.weightLabel.text = weightNotes[indexPath.row].weightKG.asString
-        cell.changesLabel.text = weightNotes[indexPath.row].changesKG.asString
+        if UserDefaultsManager.shared.isMetricSystemEnabled {
+            cell.weightLabel.text = weightNotes[indexPath.row].weightKG.asString
+            cell.changesLabel.text = weightNotes[indexPath.row].changesKG.asString
+        } else {
+            cell.weightLabel.text = weightNotes[indexPath.row].weightLB.asString
+            cell.changesLabel.text = weightNotes[indexPath.row].changesLB.asString
+        }
         cell.dateLabel.text = weightNotes[indexPath.row].date.dateString
+
         let image = UIImage(named: K.IconNames.chevron)
         let chevron  = UIImageView(frame: CGRect(x: 0,
                                                  y: 0,
@@ -48,5 +54,33 @@ extension MainScreenViewModel {
         chevron.image = image?.withTintColor(.wwText, renderingMode: .alwaysOriginal)
         cell.accessoryView = chevron
         return cell
+    }
+
+    func giveCurrentScaleSystemState() -> Bool {
+        UserDefaultsManager.shared.isMetricSystemEnabled
+    }
+    func changeToMetricSystem(_ state: Bool) {
+        UserDefaultsManager.shared.saveScaleSystemState(state)
+        needToUpdateView = true
+    }
+
+    func addNote(_ weightNote: WeightNote) {
+        weightNotes.append(weightNote)
+        weightNotes.sort(by: { $0.date < $1.date })
+        for index in 0..<weightNotes.count {
+            var currentNote = weightNotes[index]
+            weightNoteStore.deleteNote(currentNote)
+            if index != 0 {
+                let previousNote = weightNotes[index - 1]
+                currentNote.changesKG = currentNote.weightKG - previousNote.weightKG
+            } else {
+                currentNote.changesKG = 0.0
+            }
+            weightNotes.remove(at: index)
+            weightNotes.insert(currentNote, at: index)
+            weightNoteStore.addNewNote(currentNote)
+        }
+        weightNotes.reverse()
+        needToUpdateView = true
     }
 }

@@ -12,3 +12,4 @@
 "ADD_WEIGHT" = "Add weight";
 "ADD" = "Add";
 "TODAY" = "Today";
+"ERROR_MESSAGE" = "Wrong weight input";

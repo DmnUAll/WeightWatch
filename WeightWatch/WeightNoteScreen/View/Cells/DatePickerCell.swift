@@ -7,11 +7,22 @@
 
 import UIKit
 
+// MARK: - DatePickerCellDelegate protocol
+protocol DatePickerCellDelegate: AnyObject {
+    func userPickedNewDate(_ date: Date)
+}
+
 // MARK: - DatePickerCell
 final class DatePickerCell: UITableViewCell {
 
     // MARK: - Properties and Initializers
-    private let datePicker = UICreator.shared.makeDatePicker()
+    weak var delegate: DatePickerCellDelegate?
+
+    private let datePicker: UIDatePicker = {
+        let datePicker = UICreator.shared.makeDatePicker()
+        datePicker.addTarget(nil, action: #selector(datePickerValueChanged), for: .valueChanged)
+        return datePicker
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -22,6 +33,11 @@ final class DatePickerCell: UITableViewCell {
         contentView.isUserInteractionEnabled = false
     }
 
+    convenience init(delegate: DatePickerCellDelegate) {
+        self.init()
+        self.delegate = delegate
+    }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -29,6 +45,10 @@ final class DatePickerCell: UITableViewCell {
 
 // MARK: - Helpers
 extension DatePickerCell {
+
+    @objc private func datePickerValueChanged() {
+        delegate?.userPickedNewDate(datePicker.date)
+    }
 
     private func setupAutolayout() {
         datePicker.toAutolayout()

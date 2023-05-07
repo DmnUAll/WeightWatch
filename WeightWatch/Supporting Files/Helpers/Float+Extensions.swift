@@ -10,6 +10,6 @@ import Foundation
 extension Float {
 
     var asString: String {
-        String(format: "%.2f", self)
+        return String(format: "%.1f", self)
     }
 }

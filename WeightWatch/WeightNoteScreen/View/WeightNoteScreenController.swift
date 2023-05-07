@@ -14,6 +14,7 @@ final class WeightNoteScreenController: UIViewController {
     private var viewModel: WeightNoteScreenViewModel?
 
     private let addWeightLabel = UICreator.shared.makeLabel(text: "ADD_WEIGHT".localized)
+    private var isButtonMoved = false
 
     private let tableView: UITableView = {
         let tableView = UICreator.shared.makeTable(
@@ -22,18 +23,26 @@ final class WeightNoteScreenController: UIViewController {
             (type: WeightCell.self, identifier: K.CellIdentifiers.weightCell))
         tableView.separatorStyle = .singleLine
         return tableView
-}()
+    }()
 
     private let addButton = UICreator.shared.makeButton(withTitle: "ADD".localized,
                                                         andAction: #selector(addButtonTapped))
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .wwBackground
         view.addKeyboardHiddingFeature()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
         setupAutolayout()
         addSubviews()
         setupConstraints()
+        disableButton()
         viewModel = WeightNoteScreenViewModel()
         bind()
         tableView.dataSource = self
@@ -44,12 +53,35 @@ final class WeightNoteScreenController: UIViewController {
 // MARK: - Helpers
 extension WeightNoteScreenController {
 
-    @objc private func dateButtonTapped() {
-        print(#function)
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        viewModel?.hideDatePicker()
+        // swiftlint:disable:next line_length
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if !isButtonMoved {
+                addButton.frame.origin.y -= keyboardSize.height - 34
+                isButtonMoved.toggle()
+            }
+        }
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        // swiftlint:disable:next line_length
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if isButtonMoved {
+                addButton.frame.origin.y += keyboardSize.height - 34
+                isButtonMoved.toggle()
+            }
+        }
     }
 
     @objc private func addButtonTapped() {
-        print(#function)
+        if let topController = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first?.rootViewController {
+            let destinationViewController = topController as? MainScreenController
+            if let viewModel = viewModel {
+                destinationViewController?.addNote(viewModel.createNewNote())
+            }
+        }
+        self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
     }
 
     private func setupAutolayout() {
@@ -72,6 +104,7 @@ extension WeightNoteScreenController {
             tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            addButton.heightAnchor.constraint(equalToConstant: 48),
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15.5),
             addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.5),
             addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)
@@ -80,12 +113,50 @@ extension WeightNoteScreenController {
 
     private func bind() {
         guard let viewModel = viewModel else { return }
-        viewModel.$needToUpdateView.bind { [weak self] newValue in
+        viewModel.$canShowDatePicker.bind { [weak self] newValue in
             guard let self else { return }
             if newValue {
-                tableView.reloadData()
+                tableView.performBatchUpdates {
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 0)],
+                                              with: .automatic)
+                } completion: { _ in }
+            } else {
+                tableView.performBatchUpdates {
+                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 0)],
+                                              with: .automatic)
+                } completion: { _ in }
             }
         }
+        viewModel.$canCreateNote.bind { [weak self] newValue in
+            guard let self else { return }
+            if newValue {
+                self.enableButton()
+            } else {
+                self.disableButton()
+            }
+        }
+        viewModel.$canUpdateDateLabel.bind { [weak self] newValue in
+            guard let self else { return }
+            if newValue {
+                guard let cell = self.tableView.cellForRow(at: IndexPath(row: 0,
+                                                                         section: 0)) as? SelectedDateCell else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    cell.selectedDateLabel.text = self.viewModel?.giveSelectedDate() ?? ""
+                }
+            }
+        }
+    }
+
+    private func disableButton() {
+        addButton.isEnabled = false
+        addButton.backgroundColor = .wwBackgroundGray
+    }
+
+    private func enableButton() {
+        addButton.isEnabled = true
+        addButton.backgroundColor = .wwPurple
     }
 }
 
@@ -96,11 +167,8 @@ extension WeightNoteScreenController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        viewModel?.configureCell(atIndexPath: indexPath) ?? UITableViewCell()
-    }
-
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        guard let cell = viewModel?.configureCell(atIndexPath: indexPath) else { return UITableViewCell() }
+        return cell
     }
 }
 
@@ -109,7 +177,7 @@ extension WeightNoteScreenController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            viewModel?.showDatePicker()
+            viewModel?.showOrHideDatePicker()
         }
     }
 }

@@ -7,10 +7,18 @@
 
 import UIKit
 
+// MARK: - WeightCellDelegate protocol
+protocol WeightCellDelegate: AnyObject {
+    func userEnteredWeight(_ weight: Float)
+    func canContinue(_ state: Bool)
+}
+
 // MARK: - WeightCell
 final class WeightCell: UITableViewCell {
 
     // MARK: - Properties and Initializers
+    weak var delegate: WeightCellDelegate?
+
     private let stackView = UICreator.shared.makeStackView(alignment: .center, addingSpacing: 4)
 
     let weightTextField: UITextField = {
@@ -31,6 +39,12 @@ final class WeightCell: UITableViewCell {
         setupConstraints()
         self.isAccessibilityElement = true
         contentView.isUserInteractionEnabled = false
+        weightTextField.delegate = self
+    }
+
+    convenience init(delegate: WeightCellDelegate) {
+        self.init()
+        self.delegate = delegate
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,5 +72,35 @@ extension WeightCell {
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
         ])
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension WeightCell: UITextFieldDelegate {
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String
+    ) -> Bool {
+        if string == "," {
+            textField.text = textField.text! + "."
+            return false
+        }
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        if updatedText.count == 0 {
+            delegate?.canContinue(false)
+        } else {
+            if let updatedText = Float(updatedText),
+               updatedText > 0,
+               updatedText < 1000 {
+                delegate?.userEnteredWeight(updatedText)
+                delegate?.canContinue(true)
+                return true
+            } else {
+                return false
+            }
+        }
+        return true
     }
 }

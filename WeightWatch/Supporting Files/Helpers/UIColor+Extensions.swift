@@ -13,5 +13,6 @@ extension UIColor {
     static var wwBackgroundGray: UIColor { UIColor(named: "WW Background Gray") ?? .red }
     static var wwLine: UIColor { UIColor(named: "WW Line") ?? .red }
     static var wwPurple: UIColor { UIColor(named: "WW Purple") ?? .red }
+    static var wwRed: UIColor { UIColor(named: "WW Red") ?? .red }
     static var wwText: UIColor { UIColor(named: "WW Text") ?? .red }
 }
