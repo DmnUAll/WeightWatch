@@ -13,7 +13,6 @@
 		6145FC302A0166EA00908613 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6145FC2F2A0166EA00908613 /* SceneDelegate.swift */; };
 		6145FC362A0168C700908613 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6145FC382A0168C700908613 /* Localizable.strings */; };
 		6145FC3F2A01690E00908613 /* SF-Pro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6145FC3D2A01690D00908613 /* SF-Pro.ttf */; };
-		6145FC402A01690E00908613 /* SF-Pro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6145FC3E2A01690D00908613 /* SF-Pro-Italic.ttf */; };
 		6145FC562A016B4700908613 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6145FC4E2A016B4700908613 /* UIView+Extensions.swift */; };
 		6145FC572A016B4700908613 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6145FC4F2A016B4700908613 /* String+Extensions.swift */; };
 		6145FC582A016B4700908613 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6145FC502A016B4700908613 /* UIFont+Extensions.swift */; };
@@ -35,6 +34,11 @@
 		615D7A422A07DB2B007D8D0C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D7A412A07DB2B007D8D0C /* CoreDataManager.swift */; };
 		615D7A442A07DB4D007D8D0C /* WeightNoteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D7A432A07DB4D007D8D0C /* WeightNoteStore.swift */; };
 		619D97A52A08366D00B97DE6 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619D97A42A08366D00B97DE6 /* UserDefaultsManager.swift */; };
+		619D97AC2A08FAAD00B97DE6 /* SF-Pro-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 619D97AB2A08FAAD00B97DE6 /* SF-Pro-Display-Semibold.otf */; };
+		619D97AF2A08FB7400B97DE6 /* SF-Pro-Text.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 619D97AD2A08FB7300B97DE6 /* SF-Pro-Text.ttf */; };
+		619D97B02A08FB7400B97DE6 /* SF-Pro-Text-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 619D97AE2A08FB7400B97DE6 /* SF-Pro-Text-Medium.ttf */; };
+		619D97B22A08FEBD00B97DE6 /* SF-Pro-Display.otf in Resources */ = {isa = PBXBuildFile; fileRef = 619D97B12A08FEBD00B97DE6 /* SF-Pro-Display.otf */; };
+		619D97B42A08FFE700B97DE6 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 619D97B32A08FFE700B97DE6 /* SF-Pro-Display-Bold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +51,6 @@
 		6145FC372A0168C700908613 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6145FC392A0168D000908613 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6145FC3D2A01690D00908613 /* SF-Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro.ttf"; sourceTree = "<group>"; };
-		6145FC3E2A01690D00908613 /* SF-Pro-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Italic.ttf"; sourceTree = "<group>"; };
 		6145FC4E2A016B4700908613 /* UIView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		6145FC4F2A016B4700908613 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		6145FC502A016B4700908613 /* UIFont+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
@@ -69,6 +72,11 @@
 		615D7A412A07DB2B007D8D0C /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		615D7A432A07DB4D007D8D0C /* WeightNoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightNoteStore.swift; sourceTree = "<group>"; };
 		619D97A42A08366D00B97DE6 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		619D97AB2A08FAAD00B97DE6 /* SF-Pro-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Semibold.otf"; sourceTree = "<group>"; };
+		619D97AD2A08FB7300B97DE6 /* SF-Pro-Text.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text.ttf"; sourceTree = "<group>"; };
+		619D97AE2A08FB7400B97DE6 /* SF-Pro-Text-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.ttf"; sourceTree = "<group>"; };
+		619D97B12A08FEBD00B97DE6 /* SF-Pro-Display.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display.otf"; sourceTree = "<group>"; };
+		619D97B32A08FFE700B97DE6 /* SF-Pro-Display-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Bold.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +146,11 @@
 		6145FC3C2A01690400908613 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				6145FC3E2A01690D00908613 /* SF-Pro-Italic.ttf */,
+				619D97B32A08FFE700B97DE6 /* SF-Pro-Display-Bold.otf */,
+				619D97B12A08FEBD00B97DE6 /* SF-Pro-Display.otf */,
+				619D97AE2A08FB7400B97DE6 /* SF-Pro-Text-Medium.ttf */,
+				619D97AD2A08FB7300B97DE6 /* SF-Pro-Text.ttf */,
+				619D97AB2A08FAAD00B97DE6 /* SF-Pro-Display-Semibold.otf */,
 				6145FC3D2A01690D00908613 /* SF-Pro.ttf */,
 			);
 			path = Fonts;
@@ -298,10 +310,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				619D97AC2A08FAAD00B97DE6 /* SF-Pro-Display-Semibold.otf in Resources */,
 				6145FC3F2A01690E00908613 /* SF-Pro.ttf in Resources */,
 				6145FC252A01668800908613 /* Assets.xcassets in Resources */,
+				619D97B02A08FB7400B97DE6 /* SF-Pro-Text-Medium.ttf in Resources */,
+				619D97AF2A08FB7400B97DE6 /* SF-Pro-Text.ttf in Resources */,
+				619D97B22A08FEBD00B97DE6 /* SF-Pro-Display.otf in Resources */,
+				619D97B42A08FFE700B97DE6 /* SF-Pro-Display-Bold.otf in Resources */,
 				6145FC362A0168C700908613 /* Localizable.strings in Resources */,
-				6145FC402A01690E00908613 /* SF-Pro-Italic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

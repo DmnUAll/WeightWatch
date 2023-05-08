@@ -5,6 +5,11 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>SF-Pro.ttf</string>
+		<string>SF-Pro-Display.otf</string>
+		<string>SF-Pro-Text-Medium.ttf</string>
+		<string>SF-Pro-Display-Bold.otf</string>
+		<string>SF-Pro-Text.ttf</string>
+		<string>SF-Pro-Display-Semibold.otf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

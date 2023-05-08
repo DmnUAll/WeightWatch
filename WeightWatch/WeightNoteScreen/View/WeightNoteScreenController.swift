@@ -13,8 +13,10 @@ final class WeightNoteScreenController: UIViewController {
     // MARK: - Properties and Initializers
     private var viewModel: WeightNoteScreenViewModel?
 
+    let contentView = UICreator.shared.makeView(bacgroundColor: .clear)
     private let addWeightLabel = UICreator.shared.makeLabel(text: "ADD_WEIGHT".localized)
     private var isButtonMoved = false
+    private var noteToEdit: WeightNote?
 
     private let tableView: UITableView = {
         let tableView = UICreator.shared.makeTable(
@@ -27,6 +29,11 @@ final class WeightNoteScreenController: UIViewController {
 
     private let addButton = UICreator.shared.makeButton(withTitle: "ADD".localized,
                                                         andAction: #selector(addButtonTapped))
+
+    convenience init(noteToEdit: WeightNote) {
+        self.init()
+        self.noteToEdit = noteToEdit
+    }
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -43,7 +50,13 @@ final class WeightNoteScreenController: UIViewController {
         addSubviews()
         setupConstraints()
         disableButton()
-        viewModel = WeightNoteScreenViewModel()
+        if let noteToEdit {
+            viewModel = WeightNoteScreenViewModel(noteToEdit: noteToEdit)
+            addButton.setTitle("SAVE".localized, for: .normal)
+            addWeightLabel.text = "NOTE_EDITING".localized
+        } else {
+            viewModel = WeightNoteScreenViewModel()
+        }
         bind()
         tableView.dataSource = self
         tableView.delegate = self
@@ -85,29 +98,35 @@ extension WeightNoteScreenController {
     }
 
     private func setupAutolayout() {
+        contentView.toAutolayout()
         addWeightLabel.toAutolayout()
         tableView.toAutolayout()
         addButton.toAutolayout()
     }
 
     private func addSubviews() {
-        view.addSubview(addWeightLabel)
-        view.addSubview(tableView)
-        view.addSubview(addButton)
+        contentView.addSubview(addWeightLabel)
+        contentView.addSubview(tableView)
+        contentView.addSubview(addButton)
+        view.addSubview(contentView)
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            addWeightLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            addWeightLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 32),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            addWeightLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            addWeightLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
             tableView.heightAnchor.constraint(equalToConstant: 400),
-            tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             addButton.heightAnchor.constraint(equalToConstant: 48),
-            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15.5),
-            addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.5),
-            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)
+            addButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15.5),
+            addButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.5),
+            addButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50)
         ])
     }
 

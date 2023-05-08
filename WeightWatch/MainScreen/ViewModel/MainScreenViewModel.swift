@@ -16,20 +16,41 @@ final class MainScreenViewModel {
     private let weightNoteStore = WeightNoteStore()
 
     private var weightNotes: [WeightNote] = []
-
-    init() {
-        weightNotes = weightNoteStore.weightNotes.sorted(by: { $0.date > $1.date })
-        if !weightNotes.isEmpty {
-            needToUpdateView = true
-        }
-    }
 }
 
 // MARK: - Helpers
 extension MainScreenViewModel {
 
+    func checkForData() {
+        weightNotes = weightNoteStore.weightNotes.sorted(by: { $0.date > $1.date })
+        if !weightNotes.isEmpty {
+            needToUpdateView = true
+        }
+    }
     func giveNumberOfRows() -> Int {
         weightNotes.count
+    }
+
+    func giveActualWeight() -> String? {
+        if let actualNote = weightNotes.first {
+            if UserDefaultsManager.shared.isMetricSystemEnabled {
+                return "\(actualNote.weightKG.asString) \("KG".localized)"
+            } else {
+                return "\(actualNote.weightLB.asString) \("LB".localized)"
+            }
+        }
+        return nil
+    }
+
+    func giveActualWeightChange() -> String? {
+        if let actualNote = weightNotes.first {
+            if UserDefaultsManager.shared.isMetricSystemEnabled {
+                return "\(actualNote.changesKG.asStringWithSign) \("KG".localized)"
+            } else {
+                return "\(actualNote.changesLB.asStringWithSign) \("LB".localized)"
+            }
+        }
+        return nil
     }
 
     func configureCell(forTableView tableView: UITableView, atIndexPath indexPath: IndexPath) -> UITableViewCell {
@@ -38,11 +59,11 @@ extension MainScreenViewModel {
             return UITableViewCell()
         }
         if UserDefaultsManager.shared.isMetricSystemEnabled {
-            cell.weightLabel.text = weightNotes[indexPath.row].weightKG.asString
-            cell.changesLabel.text = weightNotes[indexPath.row].changesKG.asString
+            cell.weightLabel.text = "\(weightNotes[indexPath.row].weightKG.asString) \("KG".localized)"
+            cell.changesLabel.text = "\(weightNotes[indexPath.row].changesKG.asStringWithSign) \("KG".localized)"
         } else {
-            cell.weightLabel.text = weightNotes[indexPath.row].weightLB.asString
-            cell.changesLabel.text = weightNotes[indexPath.row].changesLB.asString
+            cell.weightLabel.text = "\(weightNotes[indexPath.row].weightLB.asString) \("LB".localized)"
+            cell.changesLabel.text = "\(weightNotes[indexPath.row].changesLB.asStringWithSign) \("LB".localized)"
         }
         cell.dateLabel.text = weightNotes[indexPath.row].date.dateString
 
@@ -53,7 +74,12 @@ extension MainScreenViewModel {
                                                  height: (image?.size.height) ?? 0))
         chevron.image = image?.withTintColor(.wwText, renderingMode: .alwaysOriginal)
         cell.accessoryView = chevron
+        cell.selectionStyle = .none
         return cell
+    }
+
+    func giveSelectedNote(at indexPath: IndexPath) -> WeightNote {
+        weightNotes[indexPath.row]
     }
 
     func giveCurrentScaleSystemState() -> Bool {
@@ -65,7 +91,23 @@ extension MainScreenViewModel {
     }
 
     func addNote(_ weightNote: WeightNote) {
+        if let noteToDelete = weightNotes.first(where: { $0.id == weightNote.id }) {
+            weightNotes.removeAll { $0.id == weightNote.id }
+            weightNoteStore.deleteNote(noteToDelete)
+        }
         weightNotes.append(weightNote)
+        recalculateNotesWeightChange()
+        needToUpdateView = true
+    }
+
+    func deleteNote(at indexPath: IndexPath) {
+        let noteToDelete = weightNotes.remove(at: indexPath.row)
+        weightNoteStore.deleteNote(noteToDelete)
+        recalculateNotesWeightChange()
+        needToUpdateView = true
+    }
+
+    private func recalculateNotesWeightChange() {
         weightNotes.sort(by: { $0.date < $1.date })
         for index in 0..<weightNotes.count {
             var currentNote = weightNotes[index]
@@ -81,6 +123,5 @@ extension MainScreenViewModel {
             weightNoteStore.addNewNote(currentNote)
         }
         weightNotes.reverse()
-        needToUpdateView = true
     }
 }

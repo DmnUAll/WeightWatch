@@ -18,7 +18,7 @@ final class DatePickerCell: UITableViewCell {
     // MARK: - Properties and Initializers
     weak var delegate: DatePickerCellDelegate?
 
-    private let datePicker: UIDatePicker = {
+    let datePicker: UIDatePicker = {
         let datePicker = UICreator.shared.makeDatePicker()
         datePicker.addTarget(nil, action: #selector(datePickerValueChanged), for: .valueChanged)
         return datePicker

@@ -18,10 +18,22 @@ final class WeightNoteScreenViewModel {
     private var isDatePickerVisible = false
     private var date: Date = Date()
     private var weight: Float = 0.0
+    private var id: UUID?
+
+    convenience init(noteToEdit: WeightNote) {
+        self.init()
+        prepareDataForEditing(noteToEdit)
+    }
 }
 
 // MARK: - Helpers
 extension WeightNoteScreenViewModel {
+
+    func prepareDataForEditing(_ noteToEdit: WeightNote) {
+        date = noteToEdit.date
+        weight = noteToEdit.weightKG
+        id = noteToEdit.id
+    }
 
     func showOrHideDatePicker() {
         if isDatePickerVisible {
@@ -64,6 +76,21 @@ extension WeightNoteScreenViewModel {
         }
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         cell.selectionStyle = .none
+        if let cell = cell as? SelectedDateCell {
+            cell.selectedDateLabel.text = date.dateString == Date().dateString ? "TODAY".localized : date.dateString
+        }
+        if let cell = cell as? DatePickerCell {
+            cell.datePicker.date = date
+        }
+        if let cell = cell as? WeightCell {
+            if UserDefaultsManager.shared.isMetricSystemEnabled {
+                cell.weightTextField.text = weight > 0 ? weight.asString : ""
+                cell.weightMeasurementLabel.text = "KG".localized
+            } else {
+                cell.weightTextField.text = weight > 0 ? (weight * 2.205).asString : ""
+                cell.weightMeasurementLabel.text = "LB".localized
+            }
+        }
         return cell
     }
 
@@ -72,7 +99,11 @@ extension WeightNoteScreenViewModel {
     }
 
     func createNewNote() -> WeightNote {
-        WeightNote(id: UUID(), weightKG: weight, date: date)
+        var weightToSave = weight
+        if !UserDefaultsManager.shared.isMetricSystemEnabled {
+            weightToSave = weight / 2.205
+        }
+        return WeightNote(id: id ?? UUID(), weightKG: weightToSave, date: date)
     }
 }
 

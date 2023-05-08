@@ -17,32 +17,32 @@ final class MainScreenController: UIViewController {
     private let weightMonitorLabel = UICreator.shared.makeLabel(text: "WEIGHT_MONITOR".localized)
     private let weightMonitorView = UICreator.shared.makeView(cornerRadius: 12)
     private let currentWeightLabel = UICreator.shared.makeLabel(text: "CURRENT_WEIGHT".localized,
-                                                                font: UIFont.appFont(.bold, withSize: 13),
+                                                                font: UIFont.appFont(.textMedium, withSize: 13),
                                                                 color: .wwText.withAlphaComponent(0.4))
     private let weightStackView = UICreator.shared.makeStackView()
     private let weightLabel = UICreator.shared.makeLabel(text: "NO_DATA".localized,
-                                                         font: UIFont.appFont(.bold, withSize: 22))
-    private let gainLossLabel = UICreator.shared.makeLabel(text: "NO_DATA".localized,
-                                                           font: UIFont.appFont(.regular, withSize: 17),
+                                                         font: UIFont.appFont(.text, withSize: 22))
+    private let gainLossLabel = UICreator.shared.makeLabel(font: UIFont.appFont(.textMedium, withSize: 17),
                                                            color: .wwText.withAlphaComponent(0.6),
                                                            alignment: .left)
     private let scaleSystemStackView = UICreator.shared.makeStackView(alignment: .center, addingSpacing: 18)
     private let scaleSystemSwitch = UICreator.shared.makeSwitch(withAction: #selector(scaleSystemSwitchTapped))
-    private let metricSystemLabel = UICreator.shared.makeLabel(text: "METRIC_SYSTEM".localized)
+    private let metricSystemLabel = UICreator.shared.makeLabel(text: "METRIC_SYSTEM".localized,
+                                                               font: UIFont.appFont(.textMedium, withSize: 17))
     private let imageView = UICreator.shared.makeImageView(withImageNamed: K.ImageNames.weights)
     private let monthlyMeasurementsLabel = UICreator.shared.makeLabel(text: "MONTHLY_MEASUREMENTS".localized)
     private let graphicPlugView = UICreator.shared.makeView(cornerRadius: 12)
     private let historyLabel = UICreator.shared.makeLabel(text: "HISTORY".localized)
     private let weightHeaderLabel = UICreator.shared.makeLabel(text: "WEIGHT".localized,
-                                                               font: UIFont.appFont(.bold, withSize: 13),
+                                                               font: UIFont.appFont(.textMedium, withSize: 13),
                                                                color: .wwText.withAlphaComponent(0.4),
                                                                alignment: .left)
     private let changesHeaderLabel = UICreator.shared.makeLabel(text: "CHANGES".localized,
-                                                                font: UIFont.appFont(.bold, withSize: 13),
+                                                                font: UIFont.appFont(.textMedium, withSize: 13),
                                                                 color: .wwText.withAlphaComponent(0.4),
                                                                 alignment: .left)
     private let dateHeaderLabel = UICreator.shared.makeLabel(text: "DATE".localized,
-                                                             font: UIFont.appFont(.bold, withSize: 13),
+                                                             font: UIFont.appFont(.textMedium, withSize: 13),
                                                              color: .wwText.withAlphaComponent(0.4),
                                                              alignment: .left)
     private let headerStackView = UICreator.shared.makeStackView(alignment: .center, distribution: .fillEqually)
@@ -65,6 +65,7 @@ final class MainScreenController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         scaleSystemSwitch.isOn = viewModel?.giveCurrentScaleSystemState() ?? true
+        viewModel?.checkForData()
     }
 }
 
@@ -158,8 +159,8 @@ extension MainScreenController {
             headerLine.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 8),
             headerLine.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: inset),
-            tableView.topAnchor.constraint(equalTo: headerLine.bottomAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
+            tableView.topAnchor.constraint(equalTo: headerLine.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -inset * 6),
             createWeightNoteButton.heightAnchor.constraint(equalToConstant: 48),
             createWeightNoteButton.widthAnchor.constraint(equalTo: createWeightNoteButton.heightAnchor, multiplier: 1),
@@ -177,8 +178,17 @@ extension MainScreenController {
         viewModel.$needToUpdateView.bind { [weak self] newValue in
             guard let self else { return }
             if newValue {
-                self.tableView.reloadData()
+                self.configureActualWeightInfoView()
             }
+        }
+    }
+
+    private func configureActualWeightInfoView() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.weightLabel.text = self.viewModel?.giveActualWeight() ?? "NO_DATA".localized
+            self.gainLossLabel.text = self.viewModel?.giveActualWeightChange() ?? ""
+            self.tableView.reloadData()
         }
     }
 }
@@ -202,4 +212,62 @@ extension MainScreenController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension MainScreenController: UITableViewDelegate {
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let viewModel else { return }
+        let editViewController = WeightNoteScreenController(noteToEdit: viewModel.giveSelectedNote(at: indexPath))
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.present(editViewController, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let removeButton = UIContextualAction(style: .destructive,
+                                              title: "DELETE".localized) { [weak self] _, _, _ in
+            guard let self else { return }
+            let alertController = UIAlertController(title: "SURE_TO_DELETE".localized,
+                                                    message: nil,
+                                                    preferredStyle: .actionSheet)
+            let deleteAction = UIAlertAction(title: "DELETE".localized, style: .destructive) { _ in
+                self.viewModel?.deleteNote(at: indexPath)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+            let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { _ in
+                tableView.reloadRows(at: [indexPath], with: .none)
+            }
+            alertController.addAction(deleteAction)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true)
+        }
+        removeButton.backgroundColor = UIColor.wwRed
+        let editButton = UIContextualAction(style: .normal,
+                                              title: "EDIT".localized) { [weak self] _, _, _ in
+            guard let self,
+                  let viewModel else { return }
+            let editViewController = WeightNoteScreenController(noteToEdit: viewModel.giveSelectedNote(at: indexPath))
+            tableView.deselectRow(at: indexPath, animated: true)
+            self.present(editViewController, animated: true)
+        }
+        editButton.backgroundColor = UIColor.wwYellow
+        let config = UISwipeActionsConfiguration(actions: [editButton, removeButton])
+        config.performsFirstActionWithFullSwipe = true
+        return config
+    }
+
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        tableView.subviews.forEach { subview in
+            if String(describing: type(of: subview)) == "_UITableViewCellSwipeContainerView" {
+                if let actionView = subview.subviews.first,
+                   String(describing: type(of: actionView)) == "UISwipeActionPullView" {
+                    actionView.layer.cornerRadius = 12
+                    actionView.layer.masksToBounds = true
+                    actionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+                    actionView.backgroundColor = .wwRed
+                    (actionView.subviews.first as? UIButton)?.titleLabel?.font = UIFont.appFont(.regular, withSize: 16)
+                    actionView.frame.size.height -= 4
+                    actionView.frame.size.width = 8
+                }
+            }
+        }
+    }
 }

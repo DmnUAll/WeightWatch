@@ -9,7 +9,19 @@ import Foundation
 
 extension Float {
 
+    var asStringWithSign: String {
+        if self.truncatingRemainder(dividingBy: 1.0) == 0.0 {
+            return "\(self <= 0 ? "" : "+")\(Int(self))"
+        } else {
+            return "\(self <= 0 ? "" : "+")\(String(format: "%.1f", self))"
+        }
+    }
+
     var asString: String {
-        return String(format: "%.1f", self)
+        if self.truncatingRemainder(dividingBy: 1.0) == 0.0 {
+            return "\(Int(self))"
+        } else {
+            return String(format: "%.1f", self)
+        }
     }
 }

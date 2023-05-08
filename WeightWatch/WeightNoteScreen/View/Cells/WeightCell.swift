@@ -28,7 +28,7 @@ final class WeightCell: UITableViewCell {
     }()
 
     let weightMeasurementLabel = UICreator.shared.makeLabel(text: "KG".localized.lowercased(),
-                                                            font: UIFont.appFont(.medium, withSize: 17),
+                                                            font: UIFont.appFont(.textMedium, withSize: 17),
                                                             color: .wwText.withAlphaComponent(0.4),
                                                             alignment: .right)
 
@@ -77,6 +77,8 @@ extension WeightCell {
 
 // MARK: - UITextFieldDelegate
 extension WeightCell: UITextFieldDelegate {
+
+    // NOTE: This method works as expected on physical devices, but have troubles with input on virtual devices
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String
@@ -93,7 +95,7 @@ extension WeightCell: UITextFieldDelegate {
         } else {
             if let updatedText = Float(updatedText),
                updatedText > 0,
-               updatedText < 1000 {
+               updatedText < (weightMeasurementLabel.text == "KG".localized ? 1000 : 1000 * 2.205) {
                 delegate?.userEnteredWeight(updatedText)
                 delegate?.canContinue(true)
                 return true

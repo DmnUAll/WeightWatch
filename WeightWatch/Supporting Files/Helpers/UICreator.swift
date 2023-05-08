@@ -13,7 +13,7 @@ struct UICreator {
     static let shared = UICreator()
 
     func makeLabel(text: String? = nil,
-                   font: UIFont = UIFont.appFont(.bold, withSize: 20),
+                   font: UIFont = UIFont.appFont(.displaySemibold, withSize: 20),
                    color: UIColor = .wwText,
                    alignment: NSTextAlignment = .center,
                    andNumberOfLines numberOfLines: Int = 0
@@ -75,7 +75,7 @@ struct UICreator {
         textField.backgroundColor = .clear
         textField.textColor = .wwText
         textField.keyboardType = .decimalPad
-        textField.font =  UIFont.appFont(.bold, withSize: 34)
+        textField.font =  UIFont.appFont(.displayBold, withSize: 34)
         return textField
     }
 
@@ -104,7 +104,7 @@ struct UICreator {
         button.backgroundColor = backgroundColor
         button.tintColor = tintColor
         button.setTitle(title, for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.medium, withSize: 17)
+        button.titleLabel?.font = UIFont.appFont(.textMedium, withSize: 17)
         button.addTarget(nil, action: selector, for: .touchUpInside)
         return button
     }

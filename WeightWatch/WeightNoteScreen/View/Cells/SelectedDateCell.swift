@@ -12,8 +12,10 @@ final class SelectedDateCell: UITableViewCell {
 
     // MARK: - Properties and Initializers
     private let dateLabel = UICreator.shared.makeLabel(text: "DATE".localized,
-                                                       font: UIFont.appFont(.medium, withSize: 17))
-    let selectedDateLabel = UICreator.shared.makeLabel(text: "TODAY".localized, color: .wwPurple, alignment: .right)
+                                                       font: UIFont.appFont(.textMedium, withSize: 17))
+    let selectedDateLabel = UICreator.shared.makeLabel(text: "TODAY".localized,
+                                                       font: UIFont.appFont(.display, withSize: 17),
+                                                       color: .wwPurple, alignment: .right)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

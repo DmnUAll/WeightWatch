@@ -1,7 +1,7 @@
 "WEIGHT_MONITOR" = "Weight monitor";
 "CURRENT_WEIGHT" = "Current weight";
-"KG" = "Kg";
-"LB" = "Lb";
+"KG" = "kg";
+"LB" = "lb";
 "METRIC_SYSTEM" = "Metric system";
 "NO_DATA" = "No Data";
 "MONTHLY_MEASUREMENTS" = "Monthly measurements";
@@ -13,3 +13,10 @@
 "ADD" = "Add";
 "TODAY" = "Today";
 "ERROR_MESSAGE" = "Wrong weight input";
+"EDIT" = "Edit";
+"DELETE" = "Delete";
+"SURE_TO_DELETE" = "Are you sure you want to delete the note?";
+"CANCEL" = "Cancel";
+"EDIT" = "Edit";
+"SAVE" = "Save";
+"NOTE_EDITING" = "Note editing";

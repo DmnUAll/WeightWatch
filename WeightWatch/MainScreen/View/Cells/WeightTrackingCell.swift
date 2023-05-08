@@ -11,12 +11,12 @@ import UIKit
 final class WeightTrackingCell: UITableViewCell {
 
     // MARK: - Properties and Initializers
-    let weightLabel = UICreator.shared.makeLabel(font: UIFont.appFont(.medium, withSize: 17),
+    let weightLabel = UICreator.shared.makeLabel(font: UIFont.appFont(.textMedium, withSize: 17),
                                                  alignment: .left)
-    let changesLabel = UICreator.shared.makeLabel(font: UIFont.appFont(.medium, withSize: 17),
+    let changesLabel = UICreator.shared.makeLabel(font: UIFont.appFont(.textMedium, withSize: 17),
                                                   color: .wwText.withAlphaComponent(0.6),
                                                   alignment: .left)
-    let dateLabel = UICreator.shared.makeLabel(font: UIFont.appFont(.medium, withSize: 17),
+    let dateLabel = UICreator.shared.makeLabel(font: UIFont.appFont(.text, withSize: 17),
                                                color: .wwText.withAlphaComponent(0.4),
                                                alignment: .left)
     private let stackView = UICreator.shared.makeStackView(alignment: .center, distribution: .fillEqually)
