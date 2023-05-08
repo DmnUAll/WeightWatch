@@ -24,6 +24,7 @@ final class WeightCell: UITableViewCell {
     let weightTextField: UITextField = {
         let textField = UICreator.shared.makeTextField()
         textField.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
+        textField.addTarget(nil, action: #selector(textChanged), for: .editingChanged)
         return textField
     }()
 
@@ -50,10 +51,21 @@ final class WeightCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+
+    deinit {
+        self.delegate = nil
+    }
 }
 
 // MARK: - Helpers
 extension WeightCell {
+
+    @objc private func textChanged() {
+        if let enteredWeight = Float(weightTextField.text ?? "") {
+            delegate?.userEnteredWeight(enteredWeight)
+            delegate?.canContinue(true)
+        }
+    }
 
     private func setupAutolayout() {
         stackView.toAutolayout()
@@ -78,7 +90,6 @@ extension WeightCell {
 // MARK: - UITextFieldDelegate
 extension WeightCell: UITextFieldDelegate {
 
-    // NOTE: This method works as expected on physical devices, but have troubles with input on virtual devices
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String
@@ -90,19 +101,12 @@ extension WeightCell: UITextFieldDelegate {
         let currentText = textField.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-        if updatedText.count == 0 {
-            delegate?.canContinue(false)
+        if let updatedText = Float(updatedText),
+           updatedText > 0,
+           updatedText < (weightMeasurementLabel.text == "KG".localized ? 1000 : 1000 * 2.205) {
+            return true
         } else {
-            if let updatedText = Float(updatedText),
-               updatedText > 0,
-               updatedText < (weightMeasurementLabel.text == "KG".localized ? 1000 : 1000 * 2.205) {
-                delegate?.userEnteredWeight(updatedText)
-                delegate?.canContinue(true)
-                return true
-            } else {
-                return false
-            }
+            return false
         }
-        return true
     }
 }

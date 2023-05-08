@@ -12,6 +12,8 @@ final class MainScreenViewModel {
 
     // MARK: - Properties and Initializers
     @Observable private(set) var needToUpdateView: Bool = false
+    @Observable private(set) var needToShowToastNewNoteMessage: Bool = false
+    @Observable private(set) var needToShowToastNoteEditedMessage: Bool = false
 
     private let weightNoteStore = WeightNoteStore()
 
@@ -94,6 +96,9 @@ extension MainScreenViewModel {
         if let noteToDelete = weightNotes.first(where: { $0.id == weightNote.id }) {
             weightNotes.removeAll { $0.id == weightNote.id }
             weightNoteStore.deleteNote(noteToDelete)
+            needToShowToastNoteEditedMessage = true
+        } else {
+            needToShowToastNewNoteMessage = true
         }
         weightNotes.append(weightNote)
         recalculateNotesWeightChange()

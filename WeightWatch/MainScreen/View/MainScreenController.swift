@@ -181,6 +181,20 @@ extension MainScreenController {
                 self.configureActualWeightInfoView()
             }
         }
+        viewModel.$needToShowToastNewNoteMessage.bind { [weak self] newValue in
+            guard let self else { return }
+            if newValue {
+                self.showToast(message: "NEW_MEASUREMENT_ADDED".localized,
+                               font: UIFont.appFont(.textMedium, withSize: 15))
+            }
+        }
+        viewModel.$needToShowToastNoteEditedMessage.bind { [weak self] newValue in
+            guard let self else { return }
+            if newValue {
+                self.showToast(message: "MEASUREMENT_EDITED".localized,
+                               font: UIFont.appFont(.textMedium, withSize: 15))
+            }
+        }
     }
 
     private func configureActualWeightInfoView() {

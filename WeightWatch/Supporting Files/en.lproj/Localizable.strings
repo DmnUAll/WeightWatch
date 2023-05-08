@@ -20,3 +20,5 @@
 "EDIT" = "Edit";
 "SAVE" = "Save";
 "NOTE_EDITING" = "Note editing";
+"NEW_MEASUREMENT_ADDED" = "New measurement have been added";
+"MEASUREMENT_EDITED" = "Measurement have been changed";

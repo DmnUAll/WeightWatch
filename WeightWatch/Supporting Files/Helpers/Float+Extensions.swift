@@ -11,9 +11,9 @@ extension Float {
 
     var asStringWithSign: String {
         if self.truncatingRemainder(dividingBy: 1.0) == 0.0 {
-            return "\(self <= 0 ? "" : "+")\(Int(self))"
+            return "\(self <= 0 ? "" : "+")\(Int(self))".replacingOccurrences(of: ".", with: ",")
         } else {
-            return "\(self <= 0 ? "" : "+")\(String(format: "%.1f", self))"
+            return "\(self <= 0 ? "" : "+")\(String(format: "%.1f", self))".replacingOccurrences(of: ".", with: ",")
         }
     }
 
@@ -21,7 +21,7 @@ extension Float {
         if self.truncatingRemainder(dividingBy: 1.0) == 0.0 {
             return "\(Int(self))"
         } else {
-            return String(format: "%.1f", self)
+            return String(format: "%.1f", self).replacingOccurrences(of: ".", with: ",")
         }
     }
 }
