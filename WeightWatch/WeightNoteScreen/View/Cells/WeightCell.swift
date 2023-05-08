@@ -64,6 +64,8 @@ extension WeightCell {
         if let enteredWeight = Float(weightTextField.text ?? "") {
             delegate?.userEnteredWeight(enteredWeight)
             delegate?.canContinue(true)
+        } else {
+            delegate?.canContinue(false)
         }
     }
 
@@ -106,7 +108,7 @@ extension WeightCell: UITextFieldDelegate {
            updatedText < (weightMeasurementLabel.text == "KG".localized ? 1000 : 1000 * 2.205) {
             return true
         } else {
-            return false
+            return updatedText.isEmpty
         }
     }
 }

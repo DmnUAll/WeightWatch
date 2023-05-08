@@ -12,4 +12,8 @@ extension String {
     var localized: String {
         return NSLocalizedString(self, comment: "")
     }
+
+    func replacingDots() -> String {
+        self.replacingOccurrences(of: ".", with: ",")
+    }
 }

@@ -36,7 +36,7 @@ extension MainScreenViewModel {
     func giveActualWeight() -> String? {
         if let actualNote = weightNotes.first {
             if UserDefaultsManager.shared.isMetricSystemEnabled {
-                return "\(actualNote.weightKG.asString) \("KG".localized)"
+                return "\(actualNote.weightKG.asString.replacingDots()) \("KG".localized)"
             } else {
                 return "\(actualNote.weightLB.asString) \("LB".localized)"
             }
@@ -47,7 +47,7 @@ extension MainScreenViewModel {
     func giveActualWeightChange() -> String? {
         if let actualNote = weightNotes.first {
             if UserDefaultsManager.shared.isMetricSystemEnabled {
-                return "\(actualNote.changesKG.asStringWithSign) \("KG".localized)"
+                return "\(actualNote.changesKG.asStringWithSign.replacingDots()) \("KG".localized)"
             } else {
                 return "\(actualNote.changesLB.asStringWithSign) \("LB".localized)"
             }
@@ -61,8 +61,9 @@ extension MainScreenViewModel {
             return UITableViewCell()
         }
         if UserDefaultsManager.shared.isMetricSystemEnabled {
-            cell.weightLabel.text = "\(weightNotes[indexPath.row].weightKG.asString) \("KG".localized)"
-            cell.changesLabel.text = "\(weightNotes[indexPath.row].changesKG.asStringWithSign) \("KG".localized)"
+            cell.weightLabel.text = "\(weightNotes[indexPath.row].weightKG.asString.replacingDots()) \("KG".localized)"
+            let weightAsString = weightNotes[indexPath.row].changesKG.asStringWithSign.replacingDots()
+            cell.changesLabel.text = "\(weightAsString) \("KG".localized)"
         } else {
             cell.weightLabel.text = "\(weightNotes[indexPath.row].weightLB.asString) \("LB".localized)"
             cell.changesLabel.text = "\(weightNotes[indexPath.row].changesLB.asStringWithSign) \("LB".localized)"
